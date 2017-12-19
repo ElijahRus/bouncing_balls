@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Bouncing Balls</title>
+	<link href="./resources/css/reset.css" type="text/css" rel="stylesheet">
+	<link href="./resources/css/style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+	<canvas id="canvas" width="700" height="400"> </canvas>
+	<script>
+		var Ball= function () {
+		  this.x= 350;
+		  this.y= 390;
+		  this.xSpeed= Math.random() * 10 - 5;
+		  this.ySpeed= Math.random() * 10 - 5;
+		};
+
+		var circle= function (x, y, radius, fillCircle) {
+		  ctx.beginPath();
+		  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+		  if(fillCircle){
+		  	ctx.fill();
+		  //	ctx.fillStyle= pickRandomColor();
+		  }else{
+		  	ctx.stroke();
+		  }
+		};
+
+		Ball.prototype.draw = function () {
+			ctx.fillStyle= pickRandomColor();
+		  	circle(this.x, this.y, 12, true);
+		};
+
+		Ball.prototype.move= function () {
+		  this.x += this.xSpeed;
+		  this.y += this.ySpeed;
+		};
+
+		Ball.prototype.checkCollision= function () {
+		  if(this.x < 7 || this.x > width - 7){
+		  	this.xSpeed = -this.xSpeed;
+		  }
+		  if (this.y < 7 || this.y > height - 7){
+		  	this.ySpeed = -this.ySpeed;
+		  }
+		};
+		var canvas= document.getElementById("canvas");
+		var ctx= canvas.getContext("2d");
+
+		//var ball= new Ball();
+		var width= canvas.width;
+		var height= canvas.height;
+
+		var ball= [];
+		for (var i=0; i < 80; i++){
+			ball[i]= new Ball();
+
+		}
+		console.log('ball', ball);
+
+		setInterval (function(){
+			ctx.clearRect(0, 0, width, height);
+			for (var k= 0; k < 80; k++){
+				ball[k].draw();
+				ball[k].move();
+				ball[k].checkCollision();
+			}
+			ctx.strokeRect(0, 0, width, height);
+		}, 30);
+
+
+		var pickRandomColor= function(){
+			var colors= ["Red", "Orange", "Green", "Blue", "Purple"];
+			var color= colors[Math.floor(Math.random() * colors.length)];
+			return color;
+		};
+
+
+
+	</script>
+</body>
+</html>
